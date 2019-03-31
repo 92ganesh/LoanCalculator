@@ -1,63 +1,341 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
 
-	<!--<script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script> -->
-<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
+    <!-- Title Page-->
+    <title>Loan Predictor</title>
 
-<!-- Add additional services that you want to use -->
-<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-storage.js"></script> 
-<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyC69LkcJCFL6sfO2mldIfqrBYy4Y1Je9lc",
-    authDomain: "projectdm-c4be3.firebaseapp.com",
-    databaseURL: "https://projectdm-c4be3.firebaseio.com",
-    projectId: "projectdm-c4be3",
-    storageBucket: "projectdm-c4be3.appspot.com",
-    messagingSenderId: "383326128827"
-  };
-  firebase.initializeApp(config);
-</script>
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+
+    <!--<script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
+
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-storage.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyC69LkcJCFL6sfO2mldIfqrBYy4Y1Je9lc",
+        authDomain: "projectdm-c4be3.firebaseapp.com",
+        databaseURL: "https://projectdm-c4be3.firebaseio.com",
+        projectId: "projectdm-c4be3",
+        storageBucket: "projectdm-c4be3.appspot.com",
+        messagingSenderId: "383326128827"
+    };
+    firebase.initializeApp(config);
+    </script>
 </head>
+
 <body>
+    <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+                    <center>                    <h2 class="title">Loan Prediction</h2>
+</center>
+                    <form method="POST">
+                        
+
+<!--======================================ANNUAL INCOME==============================================================-->
+
+                        <div class="row row-space">
+                           <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Annual Income</label>
+                                    <input id="income" class="input--style-4" type="number" name="annual_income" required>
+                                </div>
+                            </div>
+<!--======================================ANNUAL INCOME==============================================================-->
+
+<!--======================================Current Loan==============================================================-->
+
+                        	<div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Current Loan</label>
+                                    <input id="loan" class="input--style-4" type="number" name="current_loan" required>
+                                </div>
+                            </div>
+<!--======================================Current Loan==============================================================-->
 
 
-<script>
-window.onload = function(){
- readFiles();
-}
-function readFiles(){
-	var imgRef=firebase.database().ref('dataset/');
-	imgRef.on('value', function(snapshot) {
-		if(snapshot.val()!=null){
-			obj = snapshot.val();
-			for(var i=1;i<obj.length;i++){
-				console.log(obj[i]);
-			}
-		}
-	});
-}			
-</script>
-</body>
+<!--======================================MONTHLY DEBT==============================================================-->
+
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Monthly Debt</label>
+                                    <input id="debt" class="input--style-4" type="number" name="monthly_debt" required>
+                                </div>
+                            </div>
+<!--======================================MONTHLY DEBT==============================================================-->
+
+
+<!--====================================================months_since_last_delinquent================================================-->
+
+
+                             <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Months Since Last Delinquent</label>
+                                    <input id="delinquent" class="input--style-4" type="number" name="months_since_last_delinquent" required>
+                                </div>
+                            </div>
+<!--==========================================months_since_last_delinquent==========================================================-->
+
+
+                        </div>
+
+
+
+
+<!--==========================================submit==========================================================-->
+
+<center>
+        <p id="loading"> Loading....please wait </p>
+        <input id="checkbutton" class="btn btn--radius-2 btn--blue" type="button" onclick="check()" value="check">
+</center>
+ <br> 
+<center><p id="prediction"></p></center>
+<!--==========================================submit==========================================================-->
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script src="js/global.js"></script>
+	<script>
+        var obj;
+        var theta = [1,0,0,0,0];
+        var predictions=[];
+        var trueLabels=[];
+        var x1=[];
+        var x2=[];
+        var x3=[];
+        var x4=[];
+        var error=0;
+        var xRanges=[];
+
+        window.onload = function(){
+            document.getElementById("checkbutton").style.display = "none";
+            readFiles();
+        }
+        function readFiles(){
+            var imgRef=firebase.database().ref('dataset/');
+            imgRef.on('value', function(snapshot) {
+                if(snapshot.val()!=null){
+                    obj = snapshot.val();
+                    for(var i=1;i<obj.length;i++){
+                        console.log(obj[i]);
+                    }
+                   log();
+                   document.getElementById("loading").style.display = "none";
+                   document.getElementById("checkbutton").style.display = "block";
+                }
+            });
+        }
+        function sigmoid(thetaX){
+            var result = (1/(1+Math.pow(Math.E,-thetaX)));
+            return result;
+        }			
+        function errorCheck(){
+            for(var i=1;i<obj.length;i++){
+                var thetaX = theta[0]+(theta[1]*x1[i])+(theta[2]*x2[i])+(theta[2]*x3[i])+(theta[2]*x4[i]);
+                var predict = sigmoid(thetaX);
+                predictions[i]=predict;
+            }
+            //error
+            error=0;
+            for(var i=1;i<obj.length;i++){
+                var out;
+                if(predictions[i]>=0.5){
+                    out=1;
+                }else{
+                    out=0; 
+                }
+                if(out!=trueLabels[i]){
+                    error++;
+                }
+
+            }
+           // console.log("before "+error+" "+theta[0]+" "+theta[1]+" "+theta[2]);
+        }
+        function gradient(lr){
+            // gradient update for theta0
+            var J=0;
+            for(var i=1;i<obj.length;i++){
+                J = J + ( (predictions[i]-trueLabels[i]) );
+            }
+            J = J/obj.length;
+            theta[0] = theta[0] - lr*J;
+
+            // gradient update for theta1
+            var J=0;
+            for(var i=1;i<obj.length;i++){
+                J = J + ( (predictions[i]-trueLabels[i])*x1[i] );
+            }
+            J = J/obj.length;
+            theta[1] = theta[1] - lr*J;
+
+            // gradient update for theta2
+            var J=0;
+            for(var i=1;i<obj.length;i++){
+                J = J + ( (predictions[i]-trueLabels[i])*x2[i] );
+            }
+            J = J/obj.length;
+            theta[2] = theta[2] - lr*J;
+            
+            // gradient update for theta3
+            var J=0;
+            for(var i=1;i<obj.length;i++){
+                J = J + ( (predictions[i]-trueLabels[i])*x3[i] );
+            }
+            J = J/obj.length;
+            theta[3] = theta[3] - lr*J;
+            
+            // gradient update for theta4
+            var J=0;
+            for(var i=1;i<obj.length;i++){
+                J = J + ( (predictions[i]-trueLabels[i])*x4[i] );
+            }
+            J = J/obj.length;
+            theta[4] = theta[4] - lr*J;
+        }
+
+        function normalization(){
+            var minVal=x1[1];
+            var maxVal=x1[1];
+            for(var i=1;i<obj.length;i++){
+                if(x1[i]<minVal){
+                    minVal=x1[i];
+                }
+                if(x1[i]>maxVal){
+                    maxVal=x1[i];
+                }
+            }
+            var range=maxVal-minVal; xRanges[1]=range;
+            for(var i=1;i<obj.length;i++){
+                x1[i]=x1[i]/range;
+            }
+
+            var minVal=x2[1];
+            var maxVal=x2[1];
+            for(var i=1;i<obj.length;i++){
+                if(x2[i]<minVal){
+                    minVal=x2[i];
+                }
+                if(x2[i]>maxVal){
+                    maxVal=x2[i];
+                }
+            }
+            var range=maxVal-minVal; xRanges[2]=range;
+            for(var i=1;i<obj.length;i++){
+                x2[i]=x2[i]/range;
+            }
+
+            var minVal=x3[1];
+            var maxVal=x3[1];
+            for(var i=1;i<obj.length;i++){
+                if(x3[i]<minVal){
+                    minVal=x3[i];
+                }
+                if(x3[i]>maxVal){
+                    maxVal=x3[i];
+                }
+            }
+            var range=maxVal-minVal; xRanges[3]=range;
+            for(var i=1;i<obj.length;i++){
+                x3[i]=x3[i]/range;
+            }
+
+            var minVal=x4[1];
+            var maxVal=x4[1];
+            for(var i=1;i<obj.length;i++){
+                if(x4[i]<minVal){
+                    minVal=x4[i];
+                }
+                if(x4[i]>maxVal){
+                    maxVal=x4[i];
+                }
+            }
+            var range=maxVal-minVal; xRanges[4]=range;
+            for(var i=1;i<obj.length;i++){
+                x4[i]=x4[i]/range;
+            }
+
+        }   
+
+        function log(){
+            for(var i=1;i<obj.length;i++){
+                x1[i]=obj[i].CurrentLoanAmount;
+                x2[i]=obj[i].AnnualIncome;
+                x3[i]=obj[i].MonthlyDebt;
+                x4[i]=obj[i].MonthsSinceLastDelinquent;
+                if(obj[i].LoanStatus==="Fully Paid"){
+                    trueLabels[i] = 1;
+                }else{
+                    trueLabels[i] = 0; 
+                }
+            }
+            normalization();
+            for(var i=1;i<obj.length;i++){
+                console.log("-"+x1[i]);
+            }
+
+            var lrs=0.001;
+            for(var i=1;i<20;i++){
+                errorCheck();
+                gradient(lrs);
+            }
+        }
+        function check(){
+            var loan = document.getElementById("loan").value;
+            var income = document.getElementById("income").value;
+            var debt = document.getElementById("debt").value;
+            var delinquent = document.getElementById("delinquent").value;
+
+            loan/=xRanges[1]; income/=xRanges[2];
+            debt/=xRanges[3]; delinquent/=xRanges[4];
+
+            var thetaX = theta[0]+(theta[1]*loan)+(theta[2]*income)+(theta[2]*debt)+(theta[2]*delinquent);
+            var predict = sigmoid(thetaX);
+            console.log("pre "+predict+ " " + thetaX);
+            //console.log(theta[0]+" "+theta[1]+" "+theta[2]+theta[3]+" "+theta[4]);
+
+            document.getElementById("prediction").innerHTML="Probability of full payment the loan is "+Math.floor(predict*100)+"%";
+            
+        }
+    </script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- end document-->

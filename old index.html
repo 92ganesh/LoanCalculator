@@ -1,0 +1,164 @@
+<html>
+<head>
+
+	<!--<script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
+
+<!-- Add additional services that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-storage.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC69LkcJCFL6sfO2mldIfqrBYy4Y1Je9lc",
+    authDomain: "projectdm-c4be3.firebaseapp.com",
+    databaseURL: "https://projectdm-c4be3.firebaseio.com",
+    projectId: "projectdm-c4be3",
+    storageBucket: "projectdm-c4be3.appspot.com",
+    messagingSenderId: "383326128827"
+  };
+  firebase.initializeApp(config);
+</script>
+
+</head>
+<body>
+
+<input type="button" value="click me" onclick="log()">
+<script>
+var obj;
+var theta = [1,0,0,0,0];
+var predictions=[];
+var trueLabels=[];
+var x1=[];
+var x2=[];
+var x3=[];
+var x4=[];
+var error=0;
+
+window.onload = function(){
+ readFiles();
+}
+function readFiles(){
+	var imgRef=firebase.database().ref('dataset/');
+	imgRef.on('value', function(snapshot) {
+		if(snapshot.val()!=null){
+			obj = snapshot.val();
+			for(var i=1;i<obj.length;i++){
+				console.log(obj[i]);
+			}
+		}
+	});
+}
+function sigmoid(thetaX){
+	var result = (1/(1+Math.pow(Math.E,-thetaX)));
+	return result;
+}			
+function errorCheck(){
+	for(var i=1;i<obj.length;i++){
+		var thetaX = theta[0]+(theta[1]*x1[i])+(theta[2]*x2[i])+(theta[2]*x3[i])+(theta[2]*x4[i]);
+		var predict = sigmoid(thetaX);
+		predictions[i]=predict;
+	}
+	//error
+	error=0;
+	for(var i=1;i<obj.length;i++){
+		var out;
+		if(predictions[i]>=0.5){
+			out=1;
+		}else{
+			out=0; 
+		}
+		if(out!=trueLabels[i]){
+			error++;
+		}
+
+	}
+	console.log("before "+error+" "+theta[0]+" "+theta[1]+" "+theta[2]);
+}
+function gradient(lr){
+	// gradient update for theta0
+	var J=0;
+	for(var i=1;i<obj.length;i++){
+		J = J + ( (predictions[i]-trueLabels[i]) );
+	}
+	J = J/obj.length;
+	theta[0] = theta[0] - lr*J;
+
+	// gradient update for theta1
+	var J=0;
+	for(var i=1;i<obj.length;i++){
+		J = J + ( (predictions[i]-trueLabels[i])*x1[i] );
+	}
+	J = J/obj.length;
+	theta[1] = theta[1] - lr*J;
+
+	// gradient update for theta2
+	var J=0;
+	for(var i=1;i<obj.length;i++){
+		J = J + ( (predictions[i]-trueLabels[i])*x2[i] );
+	}
+	J = J/obj.length;
+	theta[2] = theta[2] - lr*J;
+	
+	// gradient update for theta3
+	var J=0;
+	for(var i=1;i<obj.length;i++){
+		J = J + ( (predictions[i]-trueLabels[i])*x3[i] );
+	}
+	J = J/obj.length;
+	theta[3] = theta[3] - lr*J;
+	
+	// gradient update for theta4
+	var J=0;
+	for(var i=1;i<obj.length;i++){
+		J = J + ( (predictions[i]-trueLabels[i])*x4[i] );
+	}
+	J = J/obj.length;
+	theta[4] = theta[4] - lr*J;
+}
+
+function log(){
+
+	for(var i=1;i<obj.length;i++){
+		x1[i]=obj[i].CurrentLoanAmount;
+		x2[i]=obj[i].AnnualIncome;
+		x3[i]=obj[i].MonthlyDebt;
+		x4[i]=obj[i].MonthsSinceLastDelinquent;
+		if(obj[i].LoanStatus==="Fully Paid"){
+			trueLabels[i] = 1;
+		}else{
+			trueLabels[i] = 0; 
+		}
+	}
+	var lrs=0.00001;
+	for(var i=1;i<20;i++){
+		errorCheck();
+		gradient(lrs);
+	}
+	
+
+
+}
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
