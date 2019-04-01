@@ -48,13 +48,11 @@
 </head>
 
 <body>
-<<<<<<< HEAD
     <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
         <div class="wrapper wrapper--w680">
             <div class="card card-4">
                 <div class="card-body">
-                    <center>                    <h2 class="title">Loan Prediction</h2>
-</center>
+                    <center><h2 class="title">Loan Prediction</h2></center>
                     <form method="POST">
                         
 
@@ -155,10 +153,9 @@
             imgRef.on('value', function(snapshot) {
                 if(snapshot.val()!=null){
                     obj = snapshot.val();
-                    for(var i=1;i<obj.length;i++){
-                        console.log(obj[i]);
-                    }
+                    console.log("dataset fetched");
                    log();
+				   console.log("model trained");
                    document.getElementById("loading").style.display = "none";
                    document.getElementById("checkbutton").style.display = "block";
                 }
@@ -308,9 +305,6 @@
                 }
             }
             normalization();
-            for(var i=1;i<obj.length;i++){
-                console.log("-"+x1[i]);
-            }
 
             var lrs=0.001;
             for(var i=1;i<20;i++){
@@ -327,10 +321,10 @@
             loan/=xRanges[1]; income/=xRanges[2];
             debt/=xRanges[3]; delinquent/=xRanges[4];
 
-            var thetaX = theta[0]+(theta[1]*loan)+(theta[2]*income)+(theta[2]*debt)+(theta[2]*delinquent);
+            var thetaX = theta[0]+(theta[1]*loan)+(theta[2]*income)+(theta[3]*debt)+(theta[4]*delinquent);
             var predict = sigmoid(thetaX);
-            console.log("pre "+predict+ " " + thetaX);
-            //console.log(theta[0]+" "+theta[1]+" "+theta[2]+theta[3]+" "+theta[4]);
+            console.log("prediction "+predict+ " , " + thetaX);
+            console.log(theta[0]+" "+theta[1]+" "+theta[2]+" "+theta[3]+" "+theta[4]);
 
             document.getElementById("prediction").innerHTML="Probability of full payment the loan is "+Math.floor(predict*100)+"%";
             
