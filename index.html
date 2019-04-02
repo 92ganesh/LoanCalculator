@@ -24,10 +24,11 @@
 
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!--<script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script> -->
     <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
 
+	
     <!-- Add additional services that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
@@ -115,7 +116,7 @@
  <br> 
 <center><p id="prediction"></p></center>
 <!--==========================================submit==========================================================-->
-
+ <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
 
                     </form>
                 </div>
@@ -141,9 +142,11 @@
         var x2=[];
         var x3=[];
         var x4=[];
+        var debt=[];
+        var yp=[];
+        var dp=[];
         var error=0;
         var xRanges=[];
-
         window.onload = function(){
             document.getElementById("checkbutton").style.display = "none";
             readFiles();
@@ -156,6 +159,7 @@
                     console.log("dataset fetched");
                    log();
 				   console.log("model trained");
+				   graph();
                    document.getElementById("loading").style.display = "none";
                    document.getElementById("checkbutton").style.display = "block";
                 }
@@ -183,7 +187,6 @@
                 if(out!=trueLabels[i]){
                     error++;
                 }
-
             }
            // console.log("before "+error+" "+theta[0]+" "+theta[1]+" "+theta[2]);
         }
@@ -195,7 +198,6 @@
             }
             J = J/obj.length;
             theta[0] = theta[0] - lr*J;
-
             // gradient update for theta1
             var J=0;
             for(var i=1;i<obj.length;i++){
@@ -203,7 +205,6 @@
             }
             J = J/obj.length;
             theta[1] = theta[1] - lr*J;
-
             // gradient update for theta2
             var J=0;
             for(var i=1;i<obj.length;i++){
@@ -228,7 +229,6 @@
             J = J/obj.length;
             theta[4] = theta[4] - lr*J;
         }
-
         function normalization(){
             var minVal=x1[1];
             var maxVal=x1[1];
@@ -244,7 +244,6 @@
             for(var i=1;i<obj.length;i++){
                 x1[i]=x1[i]/range;
             }
-
             var minVal=x2[1];
             var maxVal=x2[1];
             for(var i=1;i<obj.length;i++){
@@ -259,7 +258,6 @@
             for(var i=1;i<obj.length;i++){
                 x2[i]=x2[i]/range;
             }
-
             var minVal=x3[1];
             var maxVal=x3[1];
             for(var i=1;i<obj.length;i++){
@@ -274,7 +272,6 @@
             for(var i=1;i<obj.length;i++){
                 x3[i]=x3[i]/range;
             }
-
             var minVal=x4[1];
             var maxVal=x4[1];
             for(var i=1;i<obj.length;i++){
@@ -289,14 +286,31 @@
             for(var i=1;i<obj.length;i++){
                 x4[i]=x4[i]/range;
             }
-
         }   
+		
+		function graph(){
+		
+			var trace4 = {
+			 x: debt,
+			 y: predictions,
+			 mode: 'lines+markers'
+			};
 
+			var data = [trace4 ];
+
+			var layout = {};
+
+			Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});
+			
+		
+		}
+		
         function log(){
             for(var i=1;i<obj.length;i++){
                 x1[i]=obj[i].CurrentLoanAmount;
                 x2[i]=obj[i].AnnualIncome;
                 x3[i]=obj[i].MonthlyDebt;
+				debt[i]=obj[i].MonthlyDebt;
                 x4[i]=obj[i].MonthsSinceLastDelinquent;
                 if(obj[i].LoanStatus==="Fully Paid"){
                     trueLabels[i] = 1;
@@ -304,33 +318,36 @@
                     trueLabels[i] = 0; 
                 }
             }
+			
             normalization();
-
             var lrs=0.001;
             for(var i=1;i<20;i++){
                 errorCheck();
                 gradient(lrs);
             }
         }
+		
+		
         function check(){
             var loan = document.getElementById("loan").value;
             var income = document.getElementById("income").value;
             var debt = document.getElementById("debt").value;
             var delinquent = document.getElementById("delinquent").value;
-
+			dp[1] = debt;
+			
             loan/=xRanges[1]; income/=xRanges[2];
             debt/=xRanges[3]; delinquent/=xRanges[4];
-
             var thetaX = theta[0]+(theta[1]*loan)+(theta[2]*income)+(theta[3]*debt)+(theta[4]*delinquent);
             var predict = sigmoid(thetaX);
+			yp[1] = predict;
+			
             console.log("prediction "+predict+ " , " + thetaX);
             console.log(theta[0]+" "+theta[1]+" "+theta[2]+" "+theta[3]+" "+theta[4]);
-
+			console.log("theta "+theta[3]);
             document.getElementById("prediction").innerHTML="Probability of full payment the loan is "+Math.floor(predict*100)+"%";
-            
+            graph();
         }
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
 </html>
-<!-- end document-->
