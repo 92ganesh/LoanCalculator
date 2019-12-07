@@ -1,6 +1,6 @@
 # Loan approval prediction
 Web app to help banks to determine whether a person will be able to pay his loan or not. <br>
-Results are stated in probality (0 to 100%) of returning the loan.<br><br>
+Results are stated in probability (0 to 100%) of returning the loan.<br><br>
 
 ## Try this now :-
 Just head on to http://92ganesh.github.io/LoanRiskPredictor/  <br><br>
